@@ -8,10 +8,11 @@
   "license": "MIT",
   "devDependencies": {
     "fuse-box": "^2.3.3",
+    "typescript": "^2.5.3",
     "yargs": "^9.0.1"
   },
   "scripts": {
-    "script:dev":"node fuse --variant dev",
-    "script:prod":"node fuse --variant prod"
+    "script:dev": "node fuse --variant dev",
+    "script:prod": "node fuse --variant prod"
   }
 }

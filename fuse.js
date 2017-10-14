@@ -7,8 +7,7 @@ const fuse = FuseBox.init({
     homeDir: 'src/scripts',
     output: 'public/build/$name.js',
     sourceMaps: dev,
-    cache: dev,
-    tsConfig: "tsconfig.json"
+    cache: dev
 });
 
 if (dev) {

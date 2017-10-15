@@ -1,26 +1,79 @@
-const { FuseBox } = require('fuse-box');
-const argv = require('yargs').argv;
+const {
+    FuseBox,
+    VueComponentPlugin,
+    QuantumPlugin,
+    HTMLPlugin,
+    SassPlugin,
+    CSSPlugin,
+    CSSResourcePlugin,
+    WebIndexPlugin,
+    Sparky
+} = require("fuse-box");
 
-const dev = argv.variant === 'dev';
+let fuse;
+let isProduction = false;
 
-const fuse = FuseBox.init({
-    homeDir: 'src/scripts',
-    output: 'public/build/$name.js',
-    sourceMaps: dev,
-    cache: dev
+Sparky.task("set-prod", () => isProduction = true)
+
+Sparky.task("clean", () => Sparky.src("./dist").clean("dist/"));
+Sparky.task("watch-assets", () => Sparky.watch("./assets", { base: "./src" }).dest("./dist"));
+Sparky.task("copy-assets", () => Sparky.src("./assets", { base: "./src" }).dest("./dist"));
+
+Sparky.task("config", () => {
+    fuse = FuseBox.init({
+        homeDir: "./src",
+        output: "dist/$name.js",
+        //hash: isProduction,
+        sourceMaps: !isProduction,
+        useTypescriptCompiler: true,
+        polyfillNonStandardDefaultUsage: true,
+        plugins: [
+            VueComponentPlugin({
+                style: [
+                    SassPlugin({
+                        importer: true
+                    }),
+                    CSSResourcePlugin(),
+                    CSSPlugin({
+                        group: 'components.css',
+                        inject: 'components.css'
+                    })
+                ]
+            }),
+            CSSPlugin(),
+            WebIndexPlugin({
+                template: "./src/index.html"
+            }),
+            isProduction && QuantumPlugin({
+                bakeApiIntoBundle: "vendor",
+                uglify: true,
+                treeshake: true
+            }),
+        ]
+    });
+
+    if (!isProduction) {
+        fuse.dev({
+            open: true,
+            port: 8080
+        });
+    }
+
+    const vendor = fuse.bundle("vendor")
+        .instructions("~ index.js");
+
+    const app = fuse.bundle("app")
+        .instructions("> [index.js]");
+
+    if (!isProduction) {
+        app.watch().hmr();
+    }
+})
+
+Sparky.task("default", ["clean", "watch-assets", "config"], () => {
+    return fuse.run();
 });
 
-if (dev) {
-    fuse.dev({
-        port: 8080, // port 番号を指定。デフォルトは 4444
-        open: true, // ブラウザで表示
-        httpServer: true, // http サーバ機能を有効化するかどうかを指定。デフォルトは true
-    });
-}
-
-const app = fuse.bundle('app')
-    .instructions(`> main.ts`);
-
-dev && app.watch().hmr();
-
-fuse.run();
+Sparky.task("dist", ["clean", "copy-assets", "set-prod", "config"], () => {
+    return fuse.run();
+});

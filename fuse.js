@@ -60,10 +60,10 @@ Sparky.task("config", () => {
     }
 
     const vendor = fuse.bundle("vendor")
-        .instructions("~ index.js");
+        .instructions("~ index.ts");
 
     const app = fuse.bundle("app")
-        .instructions("> [index.js]");
+        .instructions("> [index.ts]");
 
     if (!isProduction) {
         app.watch().hmr();

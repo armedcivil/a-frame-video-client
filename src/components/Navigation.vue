@@ -10,13 +10,13 @@
     </v-toolbar-items>
   </v-toolbar>
 </template>
-<script>
+<script lang="ts">
 export default {
   methods: {
     openDocumentation() {
       window.open('http://fuse-box.org');
     },
-    goTo(url) {
+    goTo(url: string) {
       this.$router.push(url);
     }
   }

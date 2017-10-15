@@ -8,7 +8,7 @@
     </main>
   </v-app>
 </template>
-<script>
+<script lang="ts">
 import Navigation from './Navigation.vue';
 export default {
   components: {

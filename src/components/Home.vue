@@ -35,34 +35,18 @@ export default {
   },
   methods: {
     move() {
-      var self = this;
-      var filtered = this.players.filter(function(object: any) {
-        return object.id == self.inputID;
-      });
-      var player = filtered[0];
-      if (player != null && player != undefined) {
-        player.x = Number(this.inputX);
-        player.z = Number(this.inputZ);
+      if (this.player != null && this.player != undefined) {
+        this.player.x = Number(this.inputX);
+        this.player.z = Number(this.inputZ);
       }
     },
     remove() {
-      var self = this;
-      var filtered = this.players.filter(function(object: any) {
-        return object.id == self.inputID;
-      });
-      var player = filtered[0];
-      if (player != null && player != undefined) {
-        this.players.splice(this.players.indexOf(player), 1)
+      if (this.player != null && this.player != undefined) {
+        this.players.splice(this.players.indexOf(this.player), 1)
       }
     },
     push() {
-      var self = this;
-      var filtered = this.players.filter(function(object: any) {
-        return object.id == self.inputID;
-      });
-      var player = filtered[0];
-
-      if (player == null || player == undefined) {
+      if (this.player == null || this.player == undefined) {
         this.players.push({
           id: this.inputID,
           name: this.inputID,
@@ -70,6 +54,15 @@ export default {
           z: this.inputZ
         })
       }
+    }
+  },
+  computed: {
+    player: function() {
+      var self = this;
+      var filtered = this.players.filter(function(object: any) {
+        return object.id == self.inputID;
+      });
+      return filtered[0];
     }
   }
 }

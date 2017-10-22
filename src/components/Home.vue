@@ -1,19 +1,34 @@
 <template>
-  <section class="container">
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
-        <v-card-title primary-title>
-          <h5>FuseBox + Vue.js seed</h5>
-        </v-card-title>
-        <div class="logos-container">
-          <img class="logo" src="/assets/fusebox-logo.png" />
-          <img class="logo" src="/assets/heart.png" />
-          <img class="logo" src="/assets/vue-logo.png" />
-        </div>
-      </v-card>
-    </v-flex>
-  </section>
+  <div>
+    <a-scene>
+      <a-cylinder position="0 0 0" radius="20" height="0" color="#FFC65D"></a-cylinder>
+      <a-box :position="{x: x, y: y, z: z}" color="#FFFFFF"></a-box>
+      <a-sky color="#000000"></a-sky>
+    </a-scene>
+
+    <v-btn flat @click.stop="random()" style="position:absolute; z-index:20; top:0px;">Push</v-btn>
+
+  </div>
 </template>
+<script lang="ts">
+export default {
+  data: function() {
+    return {
+      x: 0,
+      y: 0.5,
+      z: 0
+    }
+  },
+  methods: {
+    random() {
+      console.log("random clicked")
+      this.x = Math.random();
+      this.z = Math.random();
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 .container {
   position: absolute;

@@ -23,5 +23,8 @@
     "scripts": {
         "script:dev": "node fuse default",
         "script:prod": "node fuse dist"
+    },
+    "dependencies": {
+        "aframe": "^0.7.1"
     }
 }

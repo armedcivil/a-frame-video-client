@@ -1,3 +1,5 @@
+require("aframe")
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';

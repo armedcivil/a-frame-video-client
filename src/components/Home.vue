@@ -3,7 +3,7 @@
     <a-scene>
       <a-cylinder position="0 0 0" radius="20" height="0" color="#FFC65D"></a-cylinder>
 
-      <player v-for="player in players" v-bind:key="player.id" :x="player.x" :z="player.z" color="#FFFFFF">
+      <player v-for="player in players" v-bind:key="player.id" :player="player" color="#FFFFFF">
       </player>
       <a-sky color="#000000"></a-sky>
     </a-scene>
@@ -12,7 +12,9 @@
       <input v-model="inputID">
       <input v-model="inputX">
       <input v-model="inputZ">
-      <v-btn flat @click.stop="input()">Push</v-btn>
+      <v-btn flat @click.stop="push()">Push</v-btn>
+      <v-btn flat @click.stop="move()">Move</v-btn>
+      <v-btn flat @click.stop="remove()">Remove</v-btn>
     </div>
 
   </div>
@@ -32,29 +34,42 @@ export default {
     }
   },
   methods: {
-    input() {
+    move() {
       var self = this;
       var filtered = this.players.filter(function(object: any) {
         return object.id == self.inputID;
       });
       var player = filtered[0];
       if (player != null && player != undefined) {
-        console.log("x:" + this.inputX + " z:" + this.inputZ)
         player.x = Number(this.inputX);
         player.z = Number(this.inputZ);
       }
-    }
-  },
-  created: function() {
-    this.players = [];
-    for (var i: number = 0; i < 21; i++) {
-      var num = i - 10;
-      this.players.push({
-        id: "hoge" + i,
-        name: "hogeName" + i,
-        x: num,
-        z: num
+    },
+    remove() {
+      var self = this;
+      var filtered = this.players.filter(function(object: any) {
+        return object.id == self.inputID;
       });
+      var player = filtered[0];
+      if (player != null && player != undefined) {
+        this.players.splice(this.players.indexOf(player), 1)
+      }
+    },
+    push() {
+      var self = this;
+      var filtered = this.players.filter(function(object: any) {
+        return object.id == self.inputID;
+      });
+      var player = filtered[0];
+
+      if (player == null || player == undefined) {
+        this.players.push({
+          id: this.inputID,
+          name: this.inputID,
+          x: this.inputX,
+          z: this.inputZ
+        })
+      }
     }
   }
 }
@@ -81,5 +96,6 @@ export default {
   position: absolute;
   z-index: 20;
   top: 0px;
+  background-color: #FFFFFF;
 }
 </style>
